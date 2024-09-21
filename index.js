@@ -1,12 +1,15 @@
 const express = require('express')
 const app = express()
 const port = 3000
-const task = require('./routes')
 const { dbConnection } = require('./config/config')
+const task = require('./routes/index')
 
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
 
 app.use(express.json())
-app.use('/', task );
+app.use('/', task )
+
 
 dbConnection();
 
