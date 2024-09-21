@@ -7,7 +7,7 @@ const Task = require('../models/Task')
 router.post('/create', async(req,res) => {
     try {
         const task = await Task.create(req.body)
-        res.status(201).json(task)
+        res.status(201).json(task)//se crea un recurso en una ubi diferente
         
     }catch {
         console.error(error);
@@ -39,17 +39,36 @@ router.get('/id/:_id', async (req, res) => {
     }
 });
 
-//router.delete('/id/:id', async(req,res) => {
+router.put('/markAsCompleted/:_id', async (req,res) => {
+    try {
+        const task = await Task.findByIdAndUpdate(req.params._id)
+        if(task){
+            res.status(200).send('task updated succesfully')
+        }
+    
+       }catch(error){
+       res.status(500).send('An error deleting tasks.');
+       }
 
-//})
+    })
+
+router.delete('/id/:_id', async(req,res) => {
+   try{
+    const task = await Task.findByIdAndDelete(req.params._id)
+    if(task){
+        res.status(200).send('task deleted succesfully')
+    }
+
+   }catch(error){
+   res.status(500).send('An error deleting tasks.');
+   }
+})
 
 
 
 module.exports = router
 
-/*POST /create: Endpoint para crear una tarea.
-GET /: Endpoint para traer todas las tareas.
-GET /id/:_id: Endpoint para buscar tarea por id.
+/*
 PUT /markAsCompleted/:_id: Endpoint para marcar una tarea como completada.
 PUT /id/:_id: Endpoint para actualizar una tarea y que solo se pueda cambiar el título de la tarea. Es decir, que no me deje cambiar el campo “completed” desde este endpoint, sino solo, el título.
 DELETE /id/:_id: Endpoint para eliminar una tarea.*/
