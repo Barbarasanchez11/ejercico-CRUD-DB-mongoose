@@ -17,7 +17,7 @@ router.post('/create', async(req,res) => {
 
 router.get('/', async(req,res) => {
     try {
-        const tasks = await Task.find()//trae todos los registros de tareas
+        const tasks = await Task.find()//método que se utiliza para buscar todos los registros de tareas en la base de dato
         res.status(200).json(tasks)
     }catch (error){
      res.status(500).send('An error occurred while trying to get the tasks.')
@@ -29,7 +29,7 @@ router.get('/', async(req,res) => {
 
 router.get('/id/:_id', async (req, res) => {
     try {
-        const task = await Task.findById(req.params._id);
+        const task = await Task.findById(req.params._id);//busca una tarea en la base de datos utilizando su ID
         if (!task) {
             return res.status(404).send('Task not found');
         }
@@ -41,7 +41,8 @@ router.get('/id/:_id', async (req, res) => {
 
 router.put('/markAsCompleted/:_id', async (req,res) => {
     try {
-        const task = await Task.findByIdAndUpdate(req.params._id)
+        const task = await Task.findByIdAndUpdate(req.params._id, {completed: false},{new:true})//se busca por ID(se obtiene de re.params._id),
+        //se actualiza el estado(completed). new:true ->significa que la función devolverá la tarea actualizada en lugar de la original.
         if(task){
             res.status(200).send('task updated succesfully')
         }
@@ -54,7 +55,9 @@ router.put('/markAsCompleted/:_id', async (req,res) => {
 
     router.put('/id/:_id', async (req,res) => {
         try {
-            const task = await Task.findByIdAndUpdate(req.params._id)
+            const task = await Task.findByIdAndUpdate(req.params._id, {title: req.body.title}, {new: true})//busca una tarea en la base de datos usando el ID proporcionado en la URL,
+            //se actualiza el título de esa tarea con el nuevo título que se envía en el cuerpo de la solicitud(req.body.title),
+            //significa que la función devolverá el documento actualizado en lugar del original.
             if(task){
                 res.status(200).send('task updated succesfully')
             }
@@ -83,7 +86,3 @@ router.delete('/id/:_id', async(req,res) => {
 
 module.exports = router
 
-/*
-PUT /markAsCompleted/:_id: Endpoint para marcar una tarea como completada.
-PUT /id/:_id: Endpoint para actualizar una tarea y que solo se pueda cambiar el título de la tarea. Es decir, que no me deje cambiar el campo “completed” desde este endpoint, sino solo, el título.
-DELETE /id/:_id: Endpoint para eliminar una tarea.*/
