@@ -47,10 +47,25 @@ router.put('/markAsCompleted/:_id', async (req,res) => {
         }
     
        }catch(error){
-       res.status(500).send('An error deleting tasks.');
+       res.status(500).send('An error updating tasks.');
        }
 
     })
+
+    router.put('/id/:_id', async (req,res) => {
+        try {
+            const task = await Task.findByIdAndUpdate(req.params._id)
+            if(task){
+                res.status(200).send('task updated succesfully')
+            }
+        
+           }catch(error){
+           res.status(500).send('An error updating tasks.');
+           }
+    
+        })
+    
+   
 
 router.delete('/id/:_id', async(req,res) => {
    try{
